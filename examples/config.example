@@ -1,0 +1,10 @@
+# Add to your Reticulum config (~/.reticulum/config)
+# Copy WebSocketInterface.py to ~/.reticulum/interfaces/
+
+[interfaces]
+  [[Browser WebSocket]]
+    type = WebSocketInterface
+    enabled = yes
+    mode = server
+    listen_ip = 0.0.0.0
+    listen_port = 8765
