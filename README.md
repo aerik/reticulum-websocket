@@ -1,10 +1,16 @@
 # Reticulum WebSocket Interface
 
-A WebSocket transport interface for the [Reticulum Network Stack](https://github.com/markqvist/Reticulum). Enables browser-based and other WebSocket clients to join the RNS network through any TCP-capable Reticulum node.
+A dual-protocol transport interface for the [Reticulum Network Stack](https://github.com/markqvist/Reticulum). Accepts both **WebSocket** and **plain TCP** connections on a single port — auto-detecting the protocol from the first bytes of each connection.
+
+This means any TCP-capable Reticulum node can add browser support without opening a second port. WebSocket clients and TCP clients coexist on the same listener.
 
 ## How It Works
 
-The WebSocket interface operates identically to Reticulum's built-in `TCPServerInterface` — it spawns a per-client interface for each WebSocket connection, with HDLC framing over WebSocket. From the Transport layer's perspective, WebSocket clients are indistinguishable from TCP clients. Link proofs, announce propagation, and path resolution all work correctly through the bridge.
+The interface listens on a single TCP port. When a client connects:
+- If the first bytes are `GET ` (HTTP upgrade) → WebSocket handshake, then HDLC over WebSocket
+- If the first bytes are raw binary → plain TCP with HDLC framing (like `TCPServerInterface`)
+
+Either way, a per-client interface is spawned with HDLC framing and tunnel synthesis. From the Transport layer's perspective, WebSocket and TCP clients are indistinguishable. Link proofs, announce propagation, and path resolution all work correctly.
 
 ## Installation
 
@@ -41,11 +47,12 @@ The WebSocket interface operates identically to Reticulum's built-in `TCPServerI
 
 ## Protocol
 
-Uses HDLC framing over WebSocket binary frames — identical to how `TCPInterface` frames packets. This means:
+Both WebSocket and TCP clients use HDLC framing — identical to how `TCPInterface` frames packets. This means:
 
 - The Transport layer handles all routing, link management, and proof forwarding
 - Each client gets its own interface instance (like `TCPServerInterface` spawning `TCPClientInterface`)
 - Transport-ID injection on outbound packets enables correct `link_table` routing back to specific clients
+- Existing TCP-based RNS clients (like `rnsd`, Sideband, NomadNet) can connect to this interface without modification
 
 ## Examples
 

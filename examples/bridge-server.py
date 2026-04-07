@@ -35,7 +35,7 @@ def main():
     # Install WebSocket interface
     iface_dir = os.path.join(config_dir, 'interfaces')
     os.makedirs(iface_dir, exist_ok=True)
-    ws_iface_src = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'python', 'WebSocketInterface.py')
+    ws_iface_src = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'WebSocketInterface.py')
     shutil.copy2(ws_iface_src, os.path.join(iface_dir, 'WebSocketInterface.py'))
 
     # Write config

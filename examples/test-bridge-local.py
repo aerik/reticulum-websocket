@@ -9,7 +9,7 @@ os.makedirs(config_dir, exist_ok=True)
 iface_dir = os.path.join(config_dir, 'interfaces')
 os.makedirs(iface_dir, exist_ok=True)
 shutil.copy2(
-    os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'python', 'WebSocketInterface.py'),
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'WebSocketInterface.py'),
     os.path.join(iface_dir, 'WebSocketInterface.py')
 )
 
